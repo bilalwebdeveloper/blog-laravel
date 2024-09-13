@@ -19,7 +19,8 @@ Route::apiResource('categories', CategoryController::class);
 
 // Route::get('categories/{id}', [CategoryController::class, 'show']);
 
-// Article and Search
+// Article and Search 
+Route::get('fetch-articles-from-api', [ArticleController::class, 'fetchArticlesFromApi']);
 Route::get('articles/search', [ArticleController::class, 'searchArticles']);
 Route::get('articles/{categoryId?}', [ArticleController::class, 'index']);
 Route::get('articles/{article}', [ArticleController::class, 'showWithDetails']);
