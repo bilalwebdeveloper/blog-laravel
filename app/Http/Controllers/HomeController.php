@@ -41,6 +41,7 @@ class HomeController extends Controller
 
             // Add the parent category and its articles to the response
             $response[] = [
+                'parent_id' => $parentCategory->id,
                 'parent_category' => $parentCategory->name,
                 'articles' => $latestArticles
             ];

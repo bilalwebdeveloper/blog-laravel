@@ -22,8 +22,9 @@ Route::apiResource('categories', CategoryController::class);
 // Article and Search 
 Route::get('fetch-articles-from-api', [ArticleController::class, 'fetchArticlesFromApi']);
 Route::get('articles/search', [ArticleController::class, 'searchArticles']);
-Route::get('articles/{categoryId?}', [ArticleController::class, 'index']);
-Route::get('articles/{article}', [ArticleController::class, 'showWithDetails']);
+Route::get('articles/sub-categories/{categoryId?}', [ArticleController::class, 'subCategoriesArticles']);
+// Articles
+Route::apiResource('articles', ArticleController::class);
 
 // Home Controller
 Route::get('/categories-with-articles', [HomeController::class, 'getParentCategoriesWithArticles']);
@@ -44,8 +45,7 @@ Route::middleware('auth-sanctum')->group(function () {
     // Logout
     Route::post('auth/logout', [LoginController::class, 'logout']);
 
-    // Articles
-    Route::apiResource('articles', ArticleController::class)->except(['index', 'show']);
+
 
     // Comments
     Route::post('articles/{article_id}/comments', [CommentController::class, 'store']);

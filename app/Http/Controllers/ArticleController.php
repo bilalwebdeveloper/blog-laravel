@@ -18,6 +18,34 @@ class ArticleController extends Controller
     {
         $this->newsService = $newsService;
     }
+    public function index($id)
+    {
+        $article = Article::withCount('likes')->with('comments')->findOrFail($id);
+        return response()->json($article, 200);
+    }
+    public function show($id)
+    {
+        return response()->json(Article::findOrFail($id), 200);
+    }
+    public function store(Request $request)
+    {
+        $article = Article::create($request->all());
+        return response()->json($article, 201);
+    }
+
+    public function update(Request $request, $id)
+    {
+        $article = Article::findOrFail($id);
+        $article->update($request->all());
+        return response()->json($article, 200);
+    }
+
+    public function destroy($id)
+    {
+        Article::destroy($id);
+        return response()->json(null, 204);
+    }
+
     public function searchArticles(Request $request)
     {
         $query = $request->input('query');
@@ -34,6 +62,7 @@ class ArticleController extends Controller
         // Return the results as JSON
         return response()->json($results);
     }
+
     public function fetchArticlesFromApi(Request $request)
     {
         // Fetch all subcategories from the database
@@ -84,79 +113,46 @@ class ArticleController extends Controller
 
 
 
-    public function index(Request $request, $categoryId = null)
-{
-    $articlesPerPage = 10;
-
-    // Get the page number from the request query string, default to 1 if not present
-    $page = $request->query('page', 1); // Default to page 1
-    $offset = ($page - 1) * $articlesPerPage;
-
-    // Check if category ID is provided
-    if ($categoryId) {
-        // Fetch articles for a specific category
-        $query = Article::where('category_id', $categoryId);
-    } else {
-        // Fetch all articles
-        $query = Article::query();
-    }
-
-    // 1. First, get the total number of articles (without pagination)
-    $totalArticles = $query->count();
-
-    // 2. Then, apply pagination (limit and offset)
-    $articles = $query->orderBy('published_at', 'desc')
-        ->offset($offset)
-        ->limit($articlesPerPage)
-        ->get(['id', 'title', 'description', 'author', 'source', 'UrlToImage', 'published_at', 'url', 'category_id'])
-        ->map(function ($article) {
-            $publishedAtHuman = Carbon::parse($article->published_at)->diffForHumans();
-            return array_merge($article->toArray(), [
-                'published_at_human' => $publishedAtHuman,
-            ]);
-        });
-
-    // 3. Calculate if there's more data to load
-    $hasMore = ($offset + $articles->count()) < $totalArticles;
-
-    return response()->json([
-        'page' => $page,
-        'articles' => $articles,
-        'has_more' => $hasMore, // Whether more articles are available
-    ]);
-}
-
-
-
-
-
-    public function show($id)
+    public function subCategoriesArticles(Request $request, $categoryId = null)
     {
-        return response()->json(Article::findOrFail($id), 200);
-    }
+        $articlesPerPage = 10;
 
-    public function showWithDetails($id)
-    {
-        $article = Article::withCount('likes')->with('comments')->findOrFail($id);
-        return response()->json($article, 200);
-    }
+        // Get the page number from the request query string, default to 1 if not present
+        $page = $request->query('page', 1); // Default to page 1
+        $offset = ($page - 1) * $articlesPerPage;
 
-    public function store(Request $request)
-    {
-        $article = Article::create($request->all());
-        return response()->json($article, 201);
-    }
+        // Check if category ID is provided
+        if ($categoryId) {
+            // Fetch articles for a specific category
+            $query = Article::where('category_id', $categoryId);
+        } else {
+            // Fetch all articles
+            $query = Article::query();
+        }
 
-    public function update(Request $request, $id)
-    {
-        $article = Article::findOrFail($id);
-        $article->update($request->all());
-        return response()->json($article, 200);
-    }
+        // 1. First, get the total number of articles (without pagination)
+        $totalArticles = $query->count();
 
-    public function destroy($id)
-    {
-        Article::destroy($id);
-        return response()->json(null, 204);
+        // 2. Then, apply pagination (limit and offset)
+        $articles = $query->orderBy('published_at', 'desc')
+            ->offset($offset)
+            ->limit($articlesPerPage)
+            ->get(['id', 'title', 'description', 'author', 'source', 'UrlToImage', 'published_at', 'url', 'category_id'])
+            ->map(function ($article) {
+                $publishedAtHuman = Carbon::parse($article->published_at)->diffForHumans();
+                return array_merge($article->toArray(), [
+                    'published_at_human' => $publishedAtHuman,
+                ]);
+            });
+
+        // 3. Calculate if there's more data to load
+        $hasMore = ($offset + $articles->count()) < $totalArticles;
+
+        return response()->json([
+            'page' => $page,
+            'articles' => $articles,
+            'has_more' => $hasMore, // Whether more articles are available
+        ]);
     }
+  
 }
