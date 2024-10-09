@@ -79,5 +79,14 @@ return [
         'encrypt_cookies' => Illuminate\Cookie\Middleware\EncryptCookies::class,
         'validate_csrf_token' => Illuminate\Foundation\Http\Middleware\ValidateCsrfToken::class,
     ],
+    'cors' => [
+        'allowed_origins' => ['*'], // Allow requests from any origin
+        'allowed_methods' => ['*'], // Allow all HTTP methods
+        'allowed_headers' => ['Authorization', 'Accept', 'Content-Type', 'X-Requested-With'], // Add Authorization to the allowed headers
+        'exposed_headers' => [], // Specify which headers should be exposed to the client
+        'max_age' => 0, // The maximum age (in seconds) of the preflight OPTIONS request
+    ],
+    'stateful' => explode(',', env('SANCTUM_STATEFUL_DOMAINS', 'localhost,127.0.0.1')),
+
 
 ];

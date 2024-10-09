@@ -4,32 +4,33 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\ArticleController;
-use App\Http\Controllers\CommentController;
-use App\Http\Controllers\LikeController;
 use App\Http\Controllers\UserPreferenceController;
 use App\Http\Controllers\SearchHistoryController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\MenuController;
+use App\Http\Controllers\ProfileController;
+
 
 // Public Categories Access
-
-Route::get('menu/{id}', [CategoryController::class, 'CategoryMenu']);
-Route::get('sub-categories-with-articles/{id}', [CategoryController::class, 'getCategoriesWithArticlesByParent']);
+Route::get('categories-with-articles', [CategoryController::class, 'getCategoriesArticles']);
+Route::get('sub-categories-with-articles/{id}', [CategoryController::class, 'getSubCategoriesArticles']);
 Route::apiResource('categories', CategoryController::class);
 
-// Route::get('categories/{id}', [CategoryController::class, 'show']);
 
 // Article and Search 
 Route::get('fetch-articles-from-api', [ArticleController::class, 'fetchArticlesFromApi']);
-Route::get('articles/search', [ArticleController::class, 'searchArticles']);
+Route::post('articles/search', [ArticleController::class, 'searchArticles']);
 Route::get('articles/sub-categories/{categoryId?}', [ArticleController::class, 'subCategoriesArticles']);
-// Articles
+Route::get('single-home-article', [ArticleController::class, 'SingleHomeArticle']);
+Route::get('/article/source', [ArticleController::class, 'fetchAllSource']); 
+Route::get('/articles/authors', [ArticleController::class, 'fetchAllAuthors']); 
 Route::apiResource('articles', ArticleController::class);
 
-// Home Controller
-Route::get('/categories-with-articles', [HomeController::class, 'getParentCategoriesWithArticles']);
-Route::get('/full-article', [HomeController::class, 'fullArticle']);
-
+// Fetch header menu
+Route::get('menu/header', [MenuController::class, 'getHeaderMenu']);
+// Fetch footer menu
+Route::get('menu/footer', [MenuController::class, 'getFooterMenu']);
 
 // Public Authentication Routes
 Route::group(['prefix' => 'auth'], function () {
@@ -41,27 +42,24 @@ Route::group(['prefix' => 'auth'], function () {
 });
 
 // Protected Routes requiring Sanctum Authentication
-Route::middleware('auth-sanctum')->group(function () {
+Route::middleware('auth:sanctum')->group(function () {
     // Logout
-    Route::post('auth/logout', [LoginController::class, 'logout']);
+    Route::get('auth/logout', [AuthController::class, 'logout']);
 
-
-
-    // Comments
-    Route::post('articles/{article_id}/comments', [CommentController::class, 'store']);
-    Route::delete('comments/{id}', [CommentController::class, 'destroy']);
-
-    // Likes
-    Route::post('articles/{article_id}/likes', [LikeController::class, 'store']);
-    Route::delete('articles/{article_id}/likes', [LikeController::class, 'destroy']);
+    //Profile
+    Route::get('/user/profile', [ProfileController::class, 'show']);
+    Route::post('/user/profile', [ProfileController::class, 'update']);
 
     // User Preferences
-    Route::apiResource('user/preferences', UserPreferenceController::class);
+    Route::apiResource('preferences', UserPreferenceController::class);
 
-    
     // Search History
     Route::apiResource('search/history', SearchHistoryController::class);
+
+    // Fetch header menu
+    Route::get('/menu/header/{$user_id}', [MenuController::class, 'getHeaderMenu']);
+    // Fetch footer menu
+    Route::get('/menu/footer/{$user_id}', [MenuController::class, 'getFooterMenu']);
+    
+    
 });
-
-
-

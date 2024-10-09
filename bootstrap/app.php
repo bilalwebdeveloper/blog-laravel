@@ -6,7 +6,7 @@ use Illuminate\Foundation\Configuration\Middleware;
 use Laravel\Sanctum\Http\Middleware\CheckAbilities;
 use Laravel\Sanctum\Http\Middleware\CheckForAnyAbility;
 use App\Http\Middleware\CheckAuthSanctum;
-
+use Fruitcake\Cors\HandleCors;
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
         web: __DIR__.'/../routes/web.php',
@@ -19,7 +19,8 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'abilities' => CheckAbilities::class,
             'ability' => CheckForAnyAbility::class,
-            'auth-sanctum' => CheckAuthSanctum::class
+            'auth-sanctum' => CheckAuthSanctum::class,
+            'cors' => HandleCors::class
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
