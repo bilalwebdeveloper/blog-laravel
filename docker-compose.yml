@@ -28,9 +28,9 @@ services:
     container_name: laravel_db
     restart: unless-stopped
     environment:
-      MYSQL_DATABASE: laravel
-      MYSQL_ROOT_PASSWORD: rootpassword
-      MYSQL_USER: laraveluser
+      MYSQL_DATABASE: scripta_news
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_USER: root
       MYSQL_PASSWORD: password
     ports:
       - "3306:3306"
