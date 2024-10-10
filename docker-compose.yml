@@ -1,5 +1,6 @@
 version: '3.8'
 services:
+news-laravel-app:
   app:
     image: php:8.2-fpm
     container_name: laravel_app

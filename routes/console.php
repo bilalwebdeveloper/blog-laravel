@@ -1,9 +1,6 @@
 <?php
-
-// routes/console.php
-
-use App\Console\Commands\FetchApiData;
+use App\Console\Commands\FetchArticleData;
 use Illuminate\Support\Facades\Schedule;
 
-Schedule::command(FetchArticleData::class)->hourly();
+Schedule::command('fetch:article-data')->daily();
 
