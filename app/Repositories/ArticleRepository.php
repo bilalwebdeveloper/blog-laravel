@@ -28,7 +28,7 @@ class ArticleRepository implements ArticleRepositoryInterface
     {
         return Article::destroy($id);
     }
-
+    
     public function searchArticles(string $query, ?string $date = null, ?string $source = null, ?string $category = null)
     {
         $articles = Article::where(function ($q) use ($query) {
@@ -54,51 +54,6 @@ class ArticleRepository implements ArticleRepositoryInterface
         return $articles->get(['id', 'title', 'description', 'source', 'category_id', 'published_at' ,'UrlToImage']);
     }
     
-    public function findArticleByUrl($url)
-    {
-        return Article::where('url', $url)->first();
-    }
-
-    public function getSubcategoryArticles($categoryId, $offset, $limit)
-    {
-        return Article::where('category_id', $categoryId)
-            ->orderBy('published_at', 'desc')
-            ->offset($offset)
-            ->limit($limit)
-            ->get(['id', 'title', 'description', 'author', 'source', 'UrlToImage', 'published_at', 'url', 'category_id'])
-            ->map(function ($article) {
-                return array_merge($article->toArray(), [
-                    'published_at_human' => Carbon::parse($article->published_at)->diffForHumans(),
-                ]);
-            });
-    }
-
-    public function getArticles($offset, $limit)
-    {
-        return Article::orderBy('published_at', 'desc')
-                ->offset($offset)
-                ->limit($limit)
-                ->get(['id', 'title', 'description', 'author', 'source', 'UrlToImage', 'published_at', 'url', 'category_id'])
-                ->map(function ($article) {
-                    return array_merge($article->toArray(), [
-                        'published_at_human' => Carbon::parse($article->published_at)->diffForHumans(),
-                    ]);
-                });
-    }
-
-    public function countArticlesByCategory($categoryId)
-    {
-        return Article::where('category_id', $categoryId)->count();
-    }
-
-    public function getFirstArticleByCategoryId($categoryId)
-    {
-        return Article::where('category_id', $categoryId)
-            ->orderBy('published_at', 'desc')
-            ->with('category')
-            ->first(['id', 'title', 'description', 'author', 'source', 'UrlToImage', 'published_at', 'url', 'category_id']);
-    }
-    
     public function fetchAllSource()
     {
         return Article::distinct()
@@ -111,5 +66,24 @@ class ArticleRepository implements ArticleRepositoryInterface
         return Article::distinct()
             ->orderBy('author')
             ->pluck('author');
+    }
+ 
+    public function findArticleByUrl($url)
+    {
+        return Article::where('url', $url)->first();
+    }
+
+   
+    public function getArticles($offset, $limit)
+    {
+        return Article::orderBy('published_at', 'desc')
+                ->offset($offset)
+                ->limit($limit)
+                ->get(['id', 'title', 'description', 'author', 'source', 'UrlToImage', 'published_at', 'url', 'category_id'])
+                ->map(function ($article) {
+                    return array_merge($article->toArray(), [
+                        'published_at_human' => Carbon::parse($article->published_at)->diffForHumans(),
+                    ]);
+                });
     }
 }

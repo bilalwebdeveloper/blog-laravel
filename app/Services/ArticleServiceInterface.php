@@ -12,9 +12,6 @@ interface ArticleServiceInterface
     public function updateArticle($id, array $data);
     public function deleteArticle($id);
     public function searchArticles(string $query, ?string $date = null, ?string $source = null, ?string $category = null);
-    public function fetchArticlesFromApi(Request $request);
-    public function getSubcategoryArticles(Request $request, $categoryId = null);
-    public function getSingleHomeArticle();
     public function fetchAllSource();
     public function fetchAllAuthors();
 }

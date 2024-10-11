@@ -85,41 +85,12 @@ class ArticleController extends Controller
         }
     }
 
-
-    public function fetchArticlesFromApi(Request $request)
-    {
-        try {
-            $articles = $this->articleService->fetchArticlesFromApi($request);
-            return response()->json(['message' => 'Articles saved successfully!'], 200);
-        } catch (\Exception $e) {
-            return response()->json(['error' => 'Failed to fetch articles from API.'], 500);
-        }
-    }
-
-    public function subCategoriesArticles(Request $request, $categoryId = null)
-    {
-        try {
-            $articlesData = $this->articleService->getSubcategoryArticles($request, $categoryId);
-            return response()->json($articlesData);
-        } catch (\Exception $e) {
-            return response()->json(['error' => 'Failed to fetch subcategory articles.'], 500);
-        }
-    }
-    public function SingleHomeArticle()
-    {
-        try {
-            $data = $this->articleService->getSingleHomeArticle();
-            return response()->json($data, 200);
-        } catch (\Exception $e) {
-            return response()->json(['error' => 'Failed to fetch subcategory articles.'], 500);
-        }
-    }
     function fetchAllSource() {
         try {
             $data = $this->articleService->fetchAllSource();
             return response()->json($data, 200);
         } catch (\Exception $e) {
-            return response()->json(['error' => 'Failed to fetch subcategory articles.'], 500);
+            return response()->json(['error' => 'Failed to fetch Sources.'], 500);
         }
     }
     function fetchAllAuthors() {
@@ -127,7 +98,7 @@ class ArticleController extends Controller
             $data = $this->articleService->fetchAllAuthors();
             return response()->json($data, 200);
         } catch (\Exception $e) {
-            return response()->json(['error' => 'Failed to fetch subcategory articles.'], 500);
+            return response()->json(['error' => 'Failed to fetch Authors.'], 500);
         }
     }
     

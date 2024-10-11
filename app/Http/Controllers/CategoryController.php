@@ -45,14 +45,4 @@ class CategoryController extends Controller
         return response()->json(null, 204);
     }
 
-    public function getSubCategoriesArticles($parent_id)
-    {
-        $data = $this->categoryService->getSubCategoriesArticles($parent_id);
-        return response()->json($data, 200);
-    }
-    public function getCategoriesArticles()
-    {
-        $data = $this->categoryService->getCategoriesArticles();
-        return response()->json($data, 200);
-    }
 }

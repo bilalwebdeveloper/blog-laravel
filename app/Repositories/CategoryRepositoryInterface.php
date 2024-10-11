@@ -9,8 +9,6 @@ interface CategoryRepositoryInterface
     public function updateCategory($id, array $data);
     public function deleteCategory($id);
     public function getSubCategoriesByParentId($parentId);
-    public function getArticlesByCategoryId($categoryId);
-    public function getParentCategories();
-    public function getLatestArticlesBySubCategories($subCategoryIds);
+    public function getParentCategories($limit=null);
     public function getCategoriesByIds(array $categoryIds, $limit);
 }

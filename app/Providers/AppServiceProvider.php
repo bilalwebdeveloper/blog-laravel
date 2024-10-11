@@ -12,6 +12,10 @@ use App\Repositories\ArticleRepositoryInterface;
 use App\Repositories\ArticleRepository;
 use App\Services\ArticleServiceInterface;
 use App\Services\ArticleService;
+use App\Repositories\CategoryArticleRepository;
+use App\Repositories\CategoryArticleRepositoryInterface;
+use App\Services\CategoryArticleServiceInterface;
+use App\Services\CategoryArticleService;
 use App\Services\CategoryServiceInterface;
 use App\Services\CategoryService;
 use App\Repositories\CategoryRepositoryInterface;
@@ -29,6 +33,11 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(UserRepositoryInterface::class, UserRepository::class);
         $this->app->bind(UserServiceInterface::class, UserService::class);
 
+        //Category Article 
+        $this->app->bind(CategoryArticleRepositoryInterface::class, CategoryArticleRepository::class);
+        $this->app->bind(CategoryArticleServiceInterface::class, CategoryArticleService::class);
+        
+        // Article 
         $this->app->bind(ArticleRepositoryInterface::class, ArticleRepository::class);
         $this->app->bind(ArticleServiceInterface::class, ArticleService::class);
         

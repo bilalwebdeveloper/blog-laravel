@@ -7,22 +7,22 @@ use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\UserPreferenceController;
 use App\Http\Controllers\SearchHistoryController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\CategoriesArticleController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\ProfileController;
 
 
 // Public Categories Access
-Route::get('categories-with-articles', [CategoryController::class, 'getCategoriesArticles']);
-Route::get('sub-categories-with-articles/{id}', [CategoryController::class, 'getSubCategoriesArticles']);
 Route::apiResource('categories', CategoryController::class);
 
+Route::get('categories-with-articles', [CategoriesArticleController::class, 'getCategoriesArticles']);
+Route::get('sub-categories-with-articles/{id}', [CategoriesArticleController::class, 'getSubCategoriesArticles']);
+Route::get('articles/sub-categories/{categoryId?}', [CategoriesArticleController::class, 'CategoriesArticles']);
+Route::get('single-home-article', [CategoriesArticleController::class, 'SingleHomeArticle']);
 
 // Article and Search 
-Route::get('fetch-articles-from-api', [ArticleController::class, 'fetchArticlesFromApi']);
 Route::post('articles/search', [ArticleController::class, 'searchArticles']);
-Route::get('articles/sub-categories/{categoryId?}', [ArticleController::class, 'subCategoriesArticles']);
-Route::get('single-home-article', [ArticleController::class, 'SingleHomeArticle']);
 Route::get('/article/source', [ArticleController::class, 'fetchAllSource']); 
 Route::get('/articles/authors', [ArticleController::class, 'fetchAllAuthors']); 
 Route::apiResource('articles', ArticleController::class);
