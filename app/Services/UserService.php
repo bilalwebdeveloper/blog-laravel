@@ -30,7 +30,7 @@ class UserService implements UserServiceInterface
         $user = $this->userRepository->findByCredentials($credentials);
 
         if ($user) {
-            $this->userRepository->updateLastLogin($user->id);
+            // $this->userRepository->updateLastLogin($user->id);
             return $user;
         }
 
