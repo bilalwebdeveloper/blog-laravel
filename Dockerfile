@@ -1,29 +1,31 @@
 # Use the official PHP image
-FROM php:8.1-fpm
+FROM php:8.2-fpm
 
 # Set working directory
 WORKDIR /var/www
 
-# Install system dependencies
+# Install system dependencies, including cron
 RUN apt-get update && apt-get install -y \
     libpng-dev \
     libjpeg-dev \
     libfreetype6-dev \
     libzip-dev \
     unzip \
+    git \
     cron \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install gd \
     && docker-php-ext-install pdo pdo_mysql zip
 
 # Install Composer
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-# Copy application source
+# Copy composer files and install PHP dependencies before copying the rest of the application
+COPY composer.json composer.lock ./
+RUN composer install --prefer-dist --no-scripts --optimize-autoloader --no-dev --verbose
+
+# Copy the rest of the application source
 COPY . .
-
-# Install PHP dependencies
-RUN composer install
 
 # Copy the entrypoint script
 COPY docker/entrypoint.sh /usr/local/bin/entrypoint.sh
