@@ -8,4 +8,4 @@ This project
 1. Navigate to your project directory in the terminal.
 2. Build the Docker image using the following command:
 
-   docker build -t news-laravel-app
+   docker build -t news-laravel-app ./
